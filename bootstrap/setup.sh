@@ -5,7 +5,7 @@ echo "Running setup script"
 set -e
 
 # Unset Kubernetes variables
-unset $(env | awk -F= '/^\w/ {print $1}'|grep -e '_SERVICE_PORT$' -e '_TCP_ADDR$' -e '_TCP_PROTO$' |xargs)
+unset $(env | awk -F= '/^\w/ {print $1}' | grep -e '_SERVICE_PORT$' -e '_TCP_ADDR$' -e '_TCP_PROTO$' | xargs)
 
 BASEDIR=/opt/instruqt/bootstrap
 
@@ -37,34 +37,27 @@ if [ -f /etc/alpine-release ]; then
   rm -f ~/.ash_history && ln -s ~/.bash_history ~/.ash_history
 fi
 
-# TODO: remove this when the items below succeed
-if [ -f /.ssh-keys/authorized_keys ]; then
-  cat /.ssh-keys/authorized_keys >> ~/.ssh/authorized_keys
-  /bin/chmod -Rf 0600 ~/.ssh
+# Copy the Participant SSH key to the user
+if [ -d /opt/instruqt/ssh/participant-ssh-key ]; then
+  mkdir -p "$HOME/.ssh"
+  /bin/chmod 0700 "$HOME/.ssh"
+  cat /opt/instruqt/ssh/participant-ssh-key/public_key  >> "$HOME/.ssh/authorized_keys"
+  cat /opt/instruqt/ssh/participant-ssh-key/public_key  >> "$HOME/.ssh/id_rsa.pub"
+  cat /opt/instruqt/ssh/participant-ssh-key/private_key >> "$HOME/.ssh/id_rsa"
+  /bin/chmod 0600 "$HOME/.ssh/*"
 fi
-
-# Copy the SSH keys from the secret
-if [ -f /.authorized-keys/authorized_keys ]; then
-  cat /.authorized-keys/authorized_keys >> ~/.ssh/authorized_keys
-fi
-
-# Copy the SSH keys from the secret
-if [ -f /.ssh-keys/id_rsa ]; then
-  cp /.ssh-keys/* ~/.ssh/
-fi
-
-# Set the correct permissions on the SSH directory
-/bin/chmod -Rf 0600 ~/.ssh
 
 # Copy the Track SSH key to the root user
-mkdir -p /root/.ssh
-/bin/chmod 0700 /root/.ssh
-cat /.ssh-keys/id_rsa.pub >> /root/.ssh/authorized_keys
-/bin/chmod 0600 /root/.ssh/authorized_keys
+if [ -d /opt/instruqt/ssh/track-ssh-key ]; then
+  mkdir -p /root/.ssh
+  /bin/chmod 0700 /root/.ssh
+  cat /opt/instruqt/ssh/track-ssh-key/public_key >> /root/.ssh/authorized_keys
+  /bin/chmod 0600 /root/.ssh/authorized_keys
+fi
 
 # Prettify the terminal
-cp ${BASEDIR}/config/vimrc $HOME/.vimrc
-cp ${BASEDIR}/config/bashrc $HOME/.bashrc
+cp ${BASEDIR}/config/vimrc "$HOME/.vimrc"
+cp ${BASEDIR}/config/bashrc "$HOME/.bashrc"
 cat ${BASEDIR}/config/profile >> /etc/profile
 
 # Copy the helper functions
