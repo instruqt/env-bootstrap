@@ -56,6 +56,12 @@ fi
 # Set the correct permissions on the SSH directory
 /bin/chmod -Rf 0600 ~/.ssh
 
+# Copy the Track SSH key to the root user
+mkdir -p /root/.ssh
+/bin/chmod 0700 /root/.ssh
+cat /.ssh-keys/id_rsa.pub >> /root/.ssh/authorized_keys
+/bin/chmod 0600 /root/.ssh/authorized_keys
+
 # Prettify the terminal
 cp ${BASEDIR}/config/vimrc $HOME/.vimrc
 cp ${BASEDIR}/config/bashrc $HOME/.bashrc
