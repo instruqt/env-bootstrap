@@ -1,0 +1,5 @@
+# Workdir
+WORKDIR="$HOME"
+if [ -e "$WORKDIR" ]; then
+  cd $WORKDIR
+fi
