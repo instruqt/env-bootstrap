@@ -7,7 +7,7 @@ set -e
 # Unset Kubernetes variables
 unset $(env | awk -F= '/^\w/ {print $1}'|grep -e '_SERVICE_PORT$' -e '_TCP_ADDR$' -e '_TCP_PROTO$' |xargs)
 
-BASEDIR=/opt/bootstrap/base-files
+BASEDIR=/opt/instruqt/bootstrap
 
 # Create the required directories
 mkdir -p /etc/dropbear ~/.ssh /var/log
@@ -85,6 +85,6 @@ echo "Setup completed, starting Gotty"
 ${BASEDIR}/bin/dumb-init --rewrite 2:15 --rewrite 15:9 ${BASEDIR}/bin/gotty \
         --title-format "Instruqt Shell" \
         --permit-write \
-        --port $GOTTY_PORT \
+        --port "$GOTTY_PORT" \
         /bin/sh -c "$GOTTY_SHELL"
 
