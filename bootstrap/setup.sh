@@ -2,7 +2,7 @@
 
 echo "Running setup script"
 
-set -e
+set -ex
 
 # Unset Kubernetes variables
 unset $(env | awk -F= '/^\w/ {print $1}' | grep -e '_SERVICE_PORT$' -e '_TCP_ADDR$' -e '_TCP_PROTO$' | xargs)
