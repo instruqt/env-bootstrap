@@ -42,8 +42,8 @@ if [ -d /opt/instruqt/ssh/participant-ssh-key ]; then
   mkdir -p "$HOME/.ssh"
   /bin/chmod 0700 "$HOME/.ssh"
   cat /opt/instruqt/ssh/participant-ssh-key/public_key  >> "$HOME/.ssh/authorized_keys"
-  cat /opt/instruqt/ssh/participant-ssh-key/public_key  >> "$HOME/.ssh/id_rsa.pub"
-  cat /opt/instruqt/ssh/participant-ssh-key/private_key >> "$HOME/.ssh/id_rsa"
+  cat /opt/instruqt/ssh/participant-ssh-key/public_key  > "$HOME/.ssh/id_rsa.pub"
+  cat /opt/instruqt/ssh/participant-ssh-key/private_key > "$HOME/.ssh/id_rsa"
   /bin/chmod 0600 "$HOME/.ssh/*"
 fi
 
