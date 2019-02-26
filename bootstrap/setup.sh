@@ -65,6 +65,9 @@ chmod +x ${BASEDIR}/bin/functions/*
 cp -a ${BASEDIR}/bin/functions/* /bin/
 cp -a ${BASEDIR}/bin/scp /bin/scp
 
+# Start instruqt agent
+DAEMON=true ${BASEDIR}/bin/instruqt-agent
+
 # Start dropbear
 pgrep sshd || ${BASEDIR}/bin/dumb-init ${BASEDIR}/bin/dropbear -s -g -F -R -E >/var/log/dropbear.log &
 
