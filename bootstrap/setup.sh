@@ -67,7 +67,7 @@ cp -a ${BASEDIR}/bin/functions/* /bin/
 cp -a ${BASEDIR}/bin/scp /bin/scp
 
 # Start instruqt agent
-DAEMON=true ${BASEDIR}/bin/instruqt-agent
+${BASEDIR}/bin/dumb-init ${BASEDIR}/bin/instruqt-agent >/var/log/instruqt-agent.log 2>&1 &
 
 # Start dropbear
 pgrep sshd || ${BASEDIR}/bin/dumb-init ${BASEDIR}/bin/dropbear -s -g -F -R -E >/var/log/dropbear.log &
