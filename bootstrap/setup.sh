@@ -9,6 +9,19 @@ unset $(env | awk -F= '/^\w/ {print $1}' | grep -e '_SERVICE_PORT$' -e '_TCP_ADD
 
 BASEDIR=/opt/instruqt/bootstrap
 
+if [ -n "$INSTRUQT_ENV_VARS" ]; then
+  OLD_IFS=$IFS
+  IFS=,
+  mkdir -p /etc/profile.d
+
+  for ENV_VAR in $INSTRUQT_ENV_VARS; do
+    eval "echo export $ENV_VAR=\$$ENV_VAR" >> /etc/profile.d/instruqt-env.sh
+  done
+
+  IFS=$OLD_IFS
+  unset OLD_IFS
+fi
+
 # Create the required directories
 mkdir -p /etc/dropbear ~/.ssh /var/log
 
