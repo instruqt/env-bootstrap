@@ -15,7 +15,7 @@ if [ -n "$INSTRUQT_ENV_VARS" ]; then
   mkdir -p /etc/profile.d
 
   for ENV_VAR in $INSTRUQT_ENV_VARS; do
-    eval "echo export $ENV_VAR=\"\$$ENV_VAR\"" >> /etc/profile.d/instruqt-env.sh
+    eval "echo export $ENV_VAR=\\\"\$$ENV_VAR\\\"" >> /etc/profile.d/instruqt-env.sh
   done
 
   IFS=$OLD_IFS
