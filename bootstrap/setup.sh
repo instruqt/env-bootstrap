@@ -45,10 +45,18 @@ fi
 
 # Fix for Alpine (MUSL <-> GLIBC)
 if [ -f /etc/alpine-release ]; then
-  mkdir -p /lib64
-  [ ! -f /lib64/ld-linux-x86-64.so.2 ] && ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
-  cp $BASEDIR/files/sgerrand.rsa.pub /etc/apk/keys/sgerrand.rsa.pub
-  apk add -q $BASEDIR/files/glibc-2.26-r0.apk || true
+  # Check if a glibc fix is already in place
+  if [ ! -f /lib64/ld-linux-x86-64.so.2 ]; then
+    # try to install glibc or libc6-compat
+    cp $BASEDIR/files/sgerrand.rsa.pub /etc/apk/keys/sgerrand.rsa.pub
+    apk add -q $BASEDIR/files/glibc-2.26-r0.apk || apk add libc6-compat || true
+
+    # symlink musl as a last resort
+    if [ ! -f /lib64/ld-linux-x86-64.so.2 ]; then
+      mkdir -p /lib64
+      ln -s /lib/libc.musl-x86_64.so.1 /lib64/ld-linux-x86-64.so.2
+    fi
+  fi
   rm -f ~/.ash_history && ln -s ~/.bash_history ~/.ash_history
 fi
 
