@@ -15,7 +15,14 @@ if [ -n "$INSTRUQT_ENV_VARS" ]; then
   mkdir -p /etc/profile.d
 
   for ENV_VAR in $INSTRUQT_ENV_VARS; do
-    eval "echo export $ENV_VAR=\\\"\$$ENV_VAR\\\"" >> /etc/profile.d/instruqt-env.sh
+    # Escape value of $ENV_VAR so we can safely store it in a file
+    #
+    # To escape a string simply put a backslash in front of every
+    # non-alphanumeric character. Do not wrap the string in single
+    # quotes or double quotes.
+    # See https://qntm.org/bash
+    VAL=$(printf "%s" "$(eval "printf \"%s\" \"\$$ENV_VAR\"")" | sed -E 's/([^a-zA-Z0-9])/\\\1/g')
+    printf "export %s=%s\n" "$ENV_VAR" "$VAL" >> /etc/profile.d/instruqt-env.sh
   done
 
   IFS=$OLD_IFS
