@@ -112,6 +112,7 @@ if [ -z "$INSTRUQT_ENTRYPOINT" ] && [ -n "$INSTRUQT_CMD" ] &&  [ "$INSTRUQT_CMD"
 fi
 
 echo "Setup completed, starting Gotty"
+touch ${BASEDIR}/setup-completed
 
 # Start Gotty
 ${BASEDIR}/bin/dumb-init --rewrite 2:15 --rewrite 15:9 ${BASEDIR}/bin/gotty \
