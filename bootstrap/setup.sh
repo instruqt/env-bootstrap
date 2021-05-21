@@ -114,6 +114,8 @@ fi
 echo "Setup completed, starting Gotty"
 touch ${BASEDIR}/host-bootstrap-completed
 
+. /etc/profile.d/instruqt-env.sh
+
 # Start Gotty
 ${BASEDIR}/bin/dumb-init --rewrite 2:15 --rewrite 15:9 ${BASEDIR}/bin/gotty \
         --title-format "Instruqt Shell" \
